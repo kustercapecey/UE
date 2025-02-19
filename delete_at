@@ -1,0 +1,15 @@
+# Ruby 快速排序实现
+def quick_sort(arr)
+  return arr if arr.length <= 1
+  pivot = arr.delete_at(rand(arr.size))
+  left, right = arr.partition { |x| x < pivot }
+  return *quick_sort(left), pivot, *quick_sort(right)
+end
+
+# 测试代码
+if __FILE__ == $0
+  array = [33, 10, 55, 71, 29, 3, 18]
+  puts "排序前: #{array}"
+  sorted = quick_sort(array)
+  puts "排序后: #{sorted}"
+end
