@@ -1,0 +1,3 @@
+web3.eth.getGasPrice().then(gasPrice => {
+    console.log('Current gas price:', web3.utils.fromWei(gasPrice, 'gwei'), 'Gwei');
+});
