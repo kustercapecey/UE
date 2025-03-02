@@ -1,0 +1,73 @@
+package com.shop.cereshop.business.controller;
+
+import com.shop.cereshop.business.page.news.NewsPageReqVO;
+import com.shop.cereshop.business.page.news.NewsRespVO;
+import com.shop.cereshop.business.page.news.NewsSaveReqVO;
+import com.shop.cereshop.business.service.news.NewsService;
+import com.shop.cereshop.business.utils.BeanUtils;
+import com.shop.cereshop.commons.domain.common.Page;
+import com.shop.cereshop.commons.domain.news.NewsDO;
+import com.shop.cereshop.commons.result.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.validation.constraints.*;
+import javax.validation.*;
+import javax.servlet.http.*;
+import java.util.*;
+import java.io.IOException;
+
+@Api("管理后台 - 资讯")
+@RestController
+@RequestMapping("/cl/news")
+@Validated
+public class NewsController {
+
+    @Resource
+    private NewsService newsService;
+
+    @PostMapping("/create")
+    @ApiOperation("创建资讯")
+    @PreAuthorize("@ss.hasPermission('cl:news:create')")
+    public Result<Integer> createNews(@Valid @RequestBody NewsSaveReqVO createReqVO) {
+        return new Result(newsService.createNews(createReqVO));
+    }
+
+    @PutMapping("/update")
+    @ApiOperation("更新资讯")
+    @PreAuthorize("@ss.hasPermission('cl:news:update')")
+    public Result<Boolean> updateNews(@Valid @RequestBody NewsSaveReqVO updateReqVO) {
+        newsService.updateNews(updateReqVO);
+        return new Result<>(true);
+    }
+
+    @DeleteMapping("/delete")
+    @ApiOperation("删除资讯")
+    @PreAuthorize("@ss.hasPermission('cl:news:delete')")
+    public Result<Boolean> deleteNews(@RequestParam("id") Integer id) {
+        newsService.deleteNews(id);
+        return new Result<>(true);
+    }
+
+    @GetMapping("/get")
+    @ApiOperation("获得资讯")
+    @PreAuthorize("@ss.hasPermission('cl:news:query')")
+    public Result<NewsRespVO> getNews(@RequestParam("id") Integer id) {
+        NewsDO news = newsService.getNews(id);
+        NewsRespVO result = BeanUtils.toBean(news, NewsRespVO.class);
+        return new Result<>(result);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("获得资讯分页")
+    @PreAuthorize("@ss.hasPermission('cl:news:query')")
+    public Result<Page<NewsRespVO>> getNewsPage(@Valid NewsPageReqVO pageReqVO) {
+        Page<NewsRespVO> pageResult = newsService.getNewsPage(pageReqVO);
+        return new Result<>(pageResult);
+    }
+
+}
