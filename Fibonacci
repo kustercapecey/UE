@@ -1,0 +1,28 @@
+struct Fibonacci {
+    curr: u64,
+    next: u64,
+}
+
+impl Fibonacci {
+    fn new() -> Self {
+        Fibonacci { curr: 0, next: 1 }
+    }
+}
+
+impl Iterator for Fibonacci {
+    type Item = u64;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        let current = self.curr;
+        self.curr = self.next;
+        self.next = current + self.next;
+        Some(current)
+    }
+}
+
+fn main() {
+    let fib = Fibonacci::new();
+    for number in fib.take(10) {
+        println!("{}", number);
+    }
+}
