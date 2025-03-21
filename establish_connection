@@ -1,0 +1,29 @@
+require 'active_record'
+
+# 设置数据库连接
+ActiveRecord::Base.establish_connection(
+  adapter: 'sqlite3',
+  database: 'db.sqlite3'
+)
+
+# 定义模型
+class User < ActiveRecord::Base
+  validates :name, presence: true
+end
+
+# 创建数据库表
+ActiveRecord::Schema.define do
+  create_table :users do |t|
+    t.string :name
+  end
+end
+
+# 插入数据
+User.create(name: 'Alice')
+
+# 查询并更新数据
+user = User.find_by(name: 'Alice')
+user.name = 'Bob'
+user.save
+
+puts "Updated User: #{user.name}"
