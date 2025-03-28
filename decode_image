@@ -1,0 +1,12 @@
+import tensorflow as tf
+import tensorflow_hub as hub
+
+content_image = tf.image.decode_image(tf.io.read_file("content.jpg"))
+style_image = tf.image.decode_image(tf.io.read_file("style.jpg"))
+
+hub_model = hub.load("https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2")
+stylized_image = hub_model(tf.image.convert_image_dtype(content_image, tf.float32)[tf.newaxis, ...], 
+                           tf.image.convert_image_dtype(style_image, tf.float32)[tf.newaxis, ...])[0]
+
+tf.keras.preprocessing.image.save_img("stylized_image.jpg", stylized_image[0])
+print("风格迁移完成，图像已保存！")
