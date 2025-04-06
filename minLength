@@ -1,0 +1,16 @@
+type Validator = (value: string) => string | null;
+
+function required(value: string): string | null {
+  return value ? null : 'This field is required';
+}
+
+function minLength(min: number): Validator {
+  return value => value.length >= min ? null : `Minimum length is ${min}`;
+}
+
+function validate(value: string, validators: Validator[]): string[] {
+  return validators.map(v => v(value)).filter(msg => msg !== null) as string[];
+}
+
+const result = validate("", [required, minLength(3)]);
+console.log(result); // ['This field is required', 'Minimum length is 3']
