@@ -1,0 +1,9 @@
+type Animal = { kind: "dog", bark: () => void } | { kind: "cat", meow: () => void };
+
+function makeSound(animal: Animal) {
+    if (animal.kind === "dog") {
+        animal.bark();
+    } else {
+        animal.meow();
+    }
+}
