@@ -1,0 +1,7 @@
+type Add<A extends number, B extends number> = [...Array<A>, ...Array<B>]['length'];
+type Sum = Add<3, 4>; // = 7
+
+type GreaterThan<A extends number, B extends number> =
+  A extends B ? false : [...Array<B>]['length'] extends [...Array<A>]['length'] ? false : true;
+
+type Test = GreaterThan<5, 3>; // = true
